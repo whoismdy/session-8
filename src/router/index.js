@@ -9,6 +9,10 @@ import DashboardView from "../views/DashboardView.vue";
 import DashboardProfileView from "../views/DashboardProfileView.vue";
 import DashboardSettingsView from "../views/DashboardSettingsView.vue";
 import { createWebHistory } from "vue-router";
+import LoginView from "../views/LoginView.vue";
+import AdminView from "../views/AdminView.vue";
+import ForbiddenView from "../views/ForbiddenView.vue";
+import { useAuth } from "../stores/auth";
 
 const routes = [
   {
@@ -37,7 +41,9 @@ const routes = [
     component: DashboardView,
     // Default child: /dashboard has no page of its own, so send it to Profile.
     redirect: { name: "dashboard-profile" },
-    meta: { title: "Dashboard" },
+    // Set on the parent only: children inherit it (to.meta merges all matched records),
+    // so every /dashboard/* page is protected with one line.
+    meta: { title: "Dashboard", requiresAuth: true },
     children: [
       {
         // Relative child paths (no leading "/") are appended to the parent: /dashboard/profile.
@@ -53,6 +59,26 @@ const routes = [
         meta: { title: "Settings" },
       },
     ],
+  },
+  {
+    // guestOnly: logged-in users have no reason to see the login page.
+    path: "/login",
+    name: "login",
+    component: LoginView,
+    meta: { title: "Login", guestOnly: true },
+  },
+  {
+    // Authentication (logged in?) + Authorization (allowed role?) both declared in meta.
+    path: "/admin",
+    name: "admin",
+    component: AdminView,
+    meta: { title: "Admin", requiresAuth: true, roles: ["admin"] },
+  },
+  {
+    path: "/forbidden",
+    name: "forbidden",
+    component: ForbiddenView,
+    meta: { title: "Access denied" },
   },
   {
     // Static route: fixed path, lists all posts.
@@ -111,7 +137,28 @@ const router = createRouter({
   },
 });
 
-// Global guard: one place for cross-cutting concerns (titles, auth checks later).
+// beforeEach runs before every navigation: the single place for access control.
+// Returning nothing/true allows it; returning a location redirects (no next() needed).
+router.beforeEach((to) => {
+  const { isLoggedIn, role } = useAuth();
+
+  // Already logged in -> keep them away from /login.
+  if (to.meta.guestOnly && isLoggedIn.value) return { name: "home" };
+
+  // Authentication: protected route + no user -> login, remembering where they wanted to go.
+  if (to.meta.requiresAuth && !isLoggedIn.value) {
+    return { name: "login", query: { redirect: to.fullPath } };
+  }
+
+  // Authorization: logged in, but is their role allowed? If not -> 403 (not login:
+  // they are already authenticated, logging in again would not help).
+  if (to.meta.roles && !to.meta.roles.includes(role.value)) {
+    return { name: "forbidden" };
+  }
+});
+
+// afterEach runs after navigation is confirmed (it can't block or redirect):
+// good for side effects like the page title, analytics, closing menus.
 router.afterEach((to) => {
   document.title = `${to.meta.title ?? "App"} | session-8`;
 });

@@ -1,3 +1,17 @@
+<script setup>
+import { useRouter } from "vue-router";
+import { useAuth } from "./stores/auth";
+
+const router = useRouter();
+const { state, isLoggedIn, role, logout } = useAuth();
+
+function onLogout() {
+  logout();
+  // Leave the (possibly protected) page right away.
+  router.push({ name: "home" });
+}
+</script>
+
 <template>
   <header class="header">
     <RouterLink :to="{ name: 'home' }" class="brand">session-8</RouterLink>
@@ -8,6 +22,12 @@
       <RouterLink :to="{ name: 'about' }">About</RouterLink>
       <RouterLink :to="{ name: 'posts' }">Posts</RouterLink>
       <RouterLink :to="{ name: 'dashboard-profile' }">Dashboard</RouterLink>
+      <!-- UI hiding is only convenience; the real protection is the router guard. -->
+      <RouterLink v-if="role === 'admin'" :to="{ name: 'admin' }">Admin</RouterLink>
+      <RouterLink v-if="!isLoggedIn" :to="{ name: 'login' }">Login</RouterLink>
+      <button v-else type="button" class="logout" @click="onLogout">
+        Logout ({{ state.user.username }})
+      </button>
     </nav>
   </header>
   <RouterView />
@@ -53,6 +73,18 @@
 .brand:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+.logout {
+  font: inherit;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+}
+.logout:hover {
+  color: var(--text-h);
 }
 @media (max-width: 600px) {
   .header {
