@@ -3,6 +3,8 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AboutView from "../views/AboutView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
+import PostsView from "../views/PostsView.vue";
+import PostDetailView from "../views/PostDetailView.vue";
 import DashboardView from "../views/DashboardView.vue";
 import DashboardProfileView from "../views/DashboardProfileView.vue";
 import DashboardSettingsView from "../views/DashboardSettingsView.vue";
@@ -52,6 +54,38 @@ const routes = [
       },
     ],
   },
+  {
+    // Static route: fixed path, lists all posts.
+    path: "/posts",
+    name: "posts",
+    component: PostsView,
+    meta: { title: "Posts" },
+  },
+  {
+    // Dynamic route: ":id" is a param. "(\\d+)" restricts it to digits, so /posts/abc
+    // falls through to the 404 route instead of calling the API with junk.
+    path: "/posts/:id(\\d+)",
+    name: "post-detail",
+    component: PostDetailView,
+    // props: true passes route.params as component props, so the view doesn't
+    // depend on $route (easier to reuse and test).
+    props: true,
+    meta: { title: "Post" },
+  },
+  // Example: dynamic route + query param (e.g. /#/posts/5?tab=comments).
+  // Query params are NOT part of the path, so they are never written in `path`.
+  // `props: true` only maps params, so use a props function to pass both
+  // (query values are strings, or null/arrays, so give them a default).
+  // {
+  //   path: "/posts/:id(\\d+)",
+  //   name: "post-detail",
+  //   component: PostDetailView,
+  //   props: (route) => ({
+  //     id: route.params.id,
+  //     tab: route.query.tab ?? "details",
+  //   }),
+  // },
+  // Navigate with: { name: "post-detail", params: { id: 5 }, query: { tab: "comments" } }
   {
     // Catch-all 404 route, always last, so unknown URLs show a proper page.
     path: "/:pathMatch(.*)*",

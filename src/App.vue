@@ -6,6 +6,7 @@
       <!-- RouterLink adds .router-link-active (and -exact-active) automatically; we style those. -->
       <RouterLink :to="{ name: 'home' }">Home</RouterLink>
       <RouterLink :to="{ name: 'about' }">About</RouterLink>
+      <RouterLink :to="{ name: 'posts' }">Posts</RouterLink>
       <RouterLink :to="{ name: 'dashboard-profile' }">Dashboard</RouterLink>
     </nav>
   </header>
