@@ -12,6 +12,8 @@ import { createWebHistory } from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import AdminView from "../views/AdminView.vue";
 import ForbiddenView from "../views/ForbiddenView.vue";
+import UsageDebounceView from "../views/UsageDebounceView.vue";
+import UsageFetchStorageView from "../views/UsageFetchStorageView.vue";
 import { useAuth } from "../stores/auth";
 
 const routes = [
@@ -59,6 +61,18 @@ const routes = [
         meta: { title: "Settings" },
       },
     ],
+  },
+  {
+    path: "/debounce",
+    name: "debounce",
+    component: UsageDebounceView,
+    meta: { title: "Debounce" },
+  },
+  {
+    path: "/fetch-storage",
+    name: "fetch-storage",
+    component: UsageFetchStorageView,
+    meta: { title: "Fetch & Storage" },
   },
   {
     // guestOnly: logged-in users have no reason to see the login page.

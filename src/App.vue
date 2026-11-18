@@ -21,6 +21,8 @@ function onLogout() {
       <RouterLink :to="{ name: 'home' }">Home</RouterLink>
       <RouterLink :to="{ name: 'about' }">About</RouterLink>
       <RouterLink :to="{ name: 'posts' }">Posts</RouterLink>
+      <RouterLink :to="{ name: 'debounce' }">Debounce</RouterLink>
+      <RouterLink :to="{ name: 'fetch-storage' }">Fetch</RouterLink>
       <RouterLink :to="{ name: 'dashboard-profile' }">Dashboard</RouterLink>
       <!-- UI hiding is only convenience; the real protection is the router guard. -->
       <RouterLink v-if="role === 'admin'" :to="{ name: 'admin' }">Admin</RouterLink>
@@ -49,6 +51,7 @@ function onLogout() {
 }
 .nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 .nav a {
