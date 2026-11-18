@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 // Home is imported eagerly: it's the landing page, so it should be in the main bundle.
 import HomeView from "../views/HomeView.vue";
-import AboutView from "../views/AboutView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import PostsView from "../views/PostsView.vue";
 import PostDetailView from "../views/PostDetailView.vue";
@@ -15,6 +14,8 @@ import ForbiddenView from "../views/ForbiddenView.vue";
 import UsageDebounceView from "../views/UsageDebounceView.vue";
 import UsageFetchStorageView from "../views/UsageFetchStorageView.vue";
 import DynamicTransitionView from "../views/DynamicTransitionView.vue";
+import UsageAsyncBoundary from "../views/UsageAsyncBoundary.vue";
+import ScopedSlotView from "../views/ScopedSlotView.vue";
 import { useAuth } from "../stores/auth";
 
 const routes = [
@@ -28,8 +29,8 @@ const routes = [
     path: "/about",
     name: "about",
     // Lazy loading: this view becomes a separate chunk, loaded only when visited.
-    // component: () => import('../views/AboutView.vue'),
-    component: AboutView,
+    component: () => import("../views/AboutView.vue"),
+    // component: AboutView,
     meta: { title: "About" },
   },
   {
@@ -80,6 +81,18 @@ const routes = [
     name: "transition",
     component: DynamicTransitionView,
     meta: { title: "Transition" },
+  },
+  {
+    path: "/async-boundary",
+    name: "async-boundary",
+    component: UsageAsyncBoundary,
+    meta: { title: "Async Boundary" },
+  },
+  {
+    path: "/scoped-slots",
+    name: "scoped-slots",
+    component: ScopedSlotView,
+    meta: { title: "Scoped Slots" },
   },
   {
     // guestOnly: logged-in users have no reason to see the login page.

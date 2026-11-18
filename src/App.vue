@@ -24,6 +24,8 @@ function onLogout() {
       <RouterLink :to="{ name: 'debounce' }">Debounce</RouterLink>
       <RouterLink :to="{ name: 'fetch-storage' }">Fetch</RouterLink>
       <RouterLink :to="{ name: 'transition' }">Transition</RouterLink>
+      <RouterLink :to="{ name: 'async-boundary' }">Async</RouterLink>
+      <RouterLink :to="{ name: 'scoped-slots' }">Slots</RouterLink>
       <RouterLink :to="{ name: 'dashboard-profile' }">Dashboard</RouterLink>
       <!-- UI hiding is only convenience; the real protection is the router guard. -->
       <RouterLink v-if="role === 'admin'" :to="{ name: 'admin' }">Admin</RouterLink>
