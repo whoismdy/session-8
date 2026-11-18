@@ -14,6 +14,7 @@ import AdminView from "../views/AdminView.vue";
 import ForbiddenView from "../views/ForbiddenView.vue";
 import UsageDebounceView from "../views/UsageDebounceView.vue";
 import UsageFetchStorageView from "../views/UsageFetchStorageView.vue";
+import DynamicTransitionView from "../views/DynamicTransitionView.vue";
 import { useAuth } from "../stores/auth";
 
 const routes = [
@@ -73,6 +74,12 @@ const routes = [
     name: "fetch-storage",
     component: UsageFetchStorageView,
     meta: { title: "Fetch & Storage" },
+  },
+  {
+    path: "/transition",
+    name: "transition",
+    component: DynamicTransitionView,
+    meta: { title: "Transition" },
   },
   {
     // guestOnly: logged-in users have no reason to see the login page.
